@@ -1,9 +1,11 @@
+
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Filter, ArrowUpFromLine } from "lucide-react";
-import { stockMovements } from "@/data/mockData";
+
+const stockMovements: any[] = [];
 
 const StockOut = () => {
   const stockOutMovements = stockMovements.filter((m) => m.type === "out");
@@ -35,45 +37,45 @@ const StockOut = () => {
       </div>
 
       {/* Stock Out Table */}
-      <Card>
-        <CardContent className="p-0">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Product</th>
-                <th>SKU</th>
-                <th>Quantity</th>
-                <th>Date</th>
-                <th>Reference</th>
-                <th>User</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stockOutMovements.map((movement) => (
-                <tr key={movement.id}>
-                  <td className="font-medium">{movement.id}</td>
-                  <td>
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-destructive/10 flex items-center justify-center">
-                        <ArrowUpFromLine className="w-4 h-4 text-destructive" />
-                      </div>
-                      {movement.product}
-                    </div>
-                  </td>
-                  <td className="font-mono text-sm text-muted-foreground">{movement.sku}</td>
-                  <td className="font-semibold text-destructive">-{movement.quantity}</td>
-                  <td className="text-muted-foreground">{movement.date}</td>
-                  <td className="text-accent">{movement.reference}</td>
-                  <td className="text-muted-foreground">{movement.user}</td>
+      {stockOutMovements.length > 0 ? (
+        <Card>
+          <CardContent className="p-0">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                  <th>Reference</th>
+                  <th>User</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-
-      {stockOutMovements.length === 0 && (
+              </thead>
+              <tbody>
+                {stockOutMovements.map((movement) => (
+                  <tr key={movement.id}>
+                    <td className="font-medium">{movement.id}</td>
+                    <td>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-destructive/10 flex items-center justify-center">
+                          <ArrowUpFromLine className="w-4 h-4 text-destructive" />
+                        </div>
+                        {movement.product}
+                      </div>
+                    </td>
+                    <td className="font-mono text-sm text-muted-foreground">{movement.sku}</td>
+                    <td className="font-semibold text-destructive">-{movement.quantity}</td>
+                    <td className="text-muted-foreground">{movement.date}</td>
+                    <td className="text-accent">{movement.reference}</td>
+                    <td className="text-muted-foreground">{movement.user}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      ) : (
         <div className="text-center py-12">
           <ArrowUpFromLine className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-medium text-foreground">No stock out records</h3>

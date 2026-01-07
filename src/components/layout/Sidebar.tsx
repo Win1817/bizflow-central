@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -18,11 +18,17 @@ import {
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path: string) => location.pathname === path;
 
   const navLinkClass = (path: string) =>
     `nav-link ${isActive(path) ? "nav-link-active" : ""}`;
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
@@ -123,7 +129,7 @@ const Sidebar = () => {
           <Settings className="w-5 h-5" />
           Settings
         </Link>
-        <button className="nav-link w-full text-left">
+        <button className="nav-link w-full text-left" onClick={handleSignOut}>
           <LogOut className="w-5 h-5" />
           Sign Out
         </button>

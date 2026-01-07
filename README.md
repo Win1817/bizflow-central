@@ -1,73 +1,106 @@
-# Welcome to your Lovable project
 
-## Project info
+# Full-Stack Authentication App
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+This is a complete web application featuring user authentication (signup and login). It is built with a modern stack including a React frontend and a Node.js/Express backend, all written in TypeScript.
 
-## How can I edit this code?
+## Technologies Used
 
-There are several ways of editing your application.
+- **Frontend:**
+  - React
+  - Vite
+  - TypeScript
+  - shadcn/ui
+  - Tailwind CSS
+- **Backend:**
+  - Node.js
+  - Express.js
+  - TypeScript
+  - PostgreSQL
+  - JSON Web Tokens (JWT) for authentication
+- **Development Tools:**
+  - `tsx` for running TypeScript directly
+  - `cross-env` for cross-platform environment variable management
+  - `eslint` for code linting
 
-**Use Lovable**
+## Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Node.js and npm (Node Package Manager)
+- Access to a PostgreSQL database instance
 
-Changes made via Lovable will be committed automatically to this repo.
+## Local Development Setup
 
-**Use your preferred IDE**
+Follow these steps to get the project running on your local machine.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 1. Clone the Repository
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 2. Install Dependencies
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+This will install all the necessary packages for both the frontend and backend.
+
+```bash
+npm install
+```
+
+### 3. Set Up Environment Variables
+
+Create a file named `.env` in the root of the project. This file will hold your secret keys and database connection string. **This file is ignored by Git and should never be committed.**
+
+Add the following variables to your `.env` file, replacing the placeholder values:
+
+```
+# URL for your PostgreSQL database
+DATABASE_URL="postgresql://user:password@host:port/database"
+
+# A strong, unique secret for signing JWTs
+JWT_SECRET="YOUR_SUPER_SECRET_KEY_HERE"
+```
+
+### 4. Database SSL Certificate
+
+This project is configured to connect to the database using SSL. Place your database certificate file, named `ca.pem`, in the root of the project directory. This file is also ignored by Git for security reasons.
+
+### 5. Set Up the Database
+
+Run the following commands to create the necessary tables and, optionally, seed the database with initial data.
+
+```bash
+# Create the 'users' table in your database
+npm run db:setup
+
+# (Optional) Seed the database with sample data
+npm run db:seed
+```
+
+### 6. Run the Application
+
+You need to run the frontend and backend servers in two separate terminals.
+
+**Terminal 1: Start the Backend API Server**
+
+```bash
+npm run serve:api
+```
+
+Your API server will be running and listening for requests on `http://localhost:3000`.
+
+**Terminal 2: Start the Frontend Development Server**
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Your React application will be available at `http://localhost:5173`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Available NPM Scripts
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- `npm run dev`: Starts the Vite development server for the frontend.
+- `npm run build`: Builds the frontend application for production.
+- `npm run serve:api`: Starts the backend Express server.
+- `npm run db:setup`: Creates the required tables in the database.
+- `npm run db:seed`: Seeds the database with initial data.
+- `npm run lint`: Lints the codebase using ESLint.

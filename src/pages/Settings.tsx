@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -5,9 +7,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building, Users, Bell, Shield, Database, CreditCard } from "lucide-react";
+import { Building, Users, Bell, Shield } from "lucide-react";
+import { fetchUsers } from "@/services/userService";
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role: string;
+}
 
 const Settings = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        setLoading(true);
+        const fetchedUsers = await fetchUsers();
+        setUsers(fetchedUsers);
+        setError(null);
+      } catch (err) {
+        setError("Failed to fetch users. Please try again later.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUsers();
+  }, []);
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
   return (
     <MainLayout
       title="Settings"
@@ -34,7 +71,7 @@ const Settings = () => {
         </TabsList>
 
         <TabsContent value="company">
-          <Card>
+        <Card>
             <CardHeader>
               <CardTitle>Company Information</CardTitle>
               <CardDescription>
@@ -101,65 +138,36 @@ const Settings = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-medium">
-                      AU
+              {loading ? (
+                <p>Loading users...</p>
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
+              ) : (
+                <div className="space-y-6">
+                  {users.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-medium">
+                          {getInitials(user.first_name, user.last_name)}
+                        </div>
+                        <div>
+                          <p className="font-medium">{user.first_name} {user.last_name}</p>
+                          <p className="text-sm text-muted-foreground">{user.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded">
+                          {user.role}
+                        </span>
+                        <Button variant="outline" size="sm">Edit</Button>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">Admin User</p>
-                      <p className="text-sm text-muted-foreground">admin@company.com</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded">
-                      Admin
-                    </span>
-                    <Button variant="outline" size="sm">Edit</Button>
-                  </div>
+                  ))}
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                    + Add User
+                  </Button>
                 </div>
-
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-medium">
-                      SU
-                    </div>
-                    <div>
-                      <p className="font-medium">Sales User</p>
-                      <p className="text-sm text-muted-foreground">sales@company.com</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="px-2 py-1 text-xs font-medium bg-accent/10 text-accent rounded">
-                      Sales
-                    </span>
-                    <Button variant="outline" size="sm">Edit</Button>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-info flex items-center justify-center text-info-foreground font-medium">
-                      IU
-                    </div>
-                    <div>
-                      <p className="font-medium">Inventory User</p>
-                      <p className="text-sm text-muted-foreground">inventory@company.com</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="px-2 py-1 text-xs font-medium bg-info/10 text-info rounded">
-                      Inventory
-                    </span>
-                    <Button variant="outline" size="sm">Edit</Button>
-                  </div>
-                </div>
-
-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                  + Add User
-                </Button>
-              </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

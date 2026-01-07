@@ -1,3 +1,4 @@
+
 import MainLayout from "@/components/layout/MainLayout";
 import MetricCard from "@/components/dashboard/MetricCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,13 +9,9 @@ import {
   AlertTriangle,
   ArrowUpRight,
   Package,
+  Activity,
+  FileText,
 } from "lucide-react";
-import {
-  dashboardMetrics,
-  recentActivity,
-  salesOrders,
-  products,
-} from "@/data/mockData";
 import StatusBadge from "@/components/ui/StatusBadge";
 import {
   BarChart,
@@ -27,14 +24,25 @@ import {
 } from "recharts";
 
 const salesData = [
-  { name: "Mon", sales: 4200 },
-  { name: "Tue", sales: 5800 },
-  { name: "Wed", sales: 3900 },
-  { name: "Thu", sales: 7200 },
-  { name: "Fri", sales: 6100 },
-  { name: "Sat", sales: 4800 },
-  { name: "Sun", sales: 3200 },
+  { name: "Mon", sales: 0 },
+  { name: "Tue", sales: 0 },
+  { name: "Wed", sales: 0 },
+  { name: "Thu", sales: 0 },
+  { name: "Fri", sales: 0 },
+  { name: "Sat", sales: 0 },
+  { name: "Sun", sales: 0 },
 ];
+
+const dashboardMetrics = {
+  totalSales: { value: 0, change: "+0%", changeType: "increase" as const },
+  totalOrders: { value: 0, change: "+0%", changeType: "increase" as const },
+  activeCustomers: { value: 0, change: "+0%", changeType: "increase" as const },
+  lowStockItems: { value: 0, change: "+0%", changeType: "increase" as const },
+};
+
+const recentActivity: any[] = [];
+const salesOrders: any[] = [];
+const products: any[] = [];
 
 const Dashboard = () => {
   const lowStockProducts = products.filter((p) => p.stock < p.minStock);
@@ -105,13 +113,20 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y divide-border">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="px-6 py-3">
-                  <p className="text-sm font-medium text-foreground">{activity.action}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{activity.details}</p>
-                  <p className="text-xs text-muted-foreground/70 mt-1">{activity.time}</p>
+              {recentActivity.length > 0 ? (
+                recentActivity.map((activity) => (
+                  <div key={activity.id} className="px-6 py-3">
+                    <p className="text-sm font-medium text-foreground">{activity.action}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{activity.details}</p>
+                    <p className="text-xs text-muted-foreground/70 mt-1">{activity.time}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="p-6 text-center text-muted-foreground">
+                  <Activity className="w-10 h-10 mx-auto mb-2 text-muted-foreground" />
+                  <p>No recent activity.</p>
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>
@@ -140,16 +155,25 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {salesOrders.slice(0, 4).map((order) => (
-                  <tr key={order.id}>
-                    <td className="font-medium">{order.id}</td>
-                    <td>{order.customer}</td>
-                    <td>${order.total.toLocaleString()}</td>
-                    <td>
-                      <StatusBadge status={order.status} />
+                {salesOrders.length > 0 ? (
+                  salesOrders.slice(0, 4).map((order) => (
+                    <tr key={order.id}>
+                      <td className="font-medium">{order.id}</td>
+                      <td>{order.customer}</td>
+                      <td>${order.total.toLocaleString()}</td>
+                      <td>
+                        <StatusBadge status={order.status} />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                      <FileText className="w-10 h-10 mx-auto mb-2 text-muted-foreground" />
+                      <p>No recent orders to show.</p>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </CardContent>
@@ -180,17 +204,26 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {lowStockProducts.map((product) => (
-                  <tr key={product.id}>
-                    <td className="font-medium flex items-center gap-2">
-                      <Package className="w-4 h-4 text-muted-foreground" />
-                      {product.name}
+                {lowStockProducts.length > 0 ? (
+                  lowStockProducts.map((product) => (
+                    <tr key={product.id}>
+                      <td className="font-medium flex items-center gap-2">
+                        <Package className="w-4 h-4 text-muted-foreground" />
+                        {product.name}
+                      </td>
+                      <td className="text-muted-foreground">{product.sku}</td>
+                      <td className="text-destructive font-medium">{product.stock}</td>
+                      <td>{product.minStock}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                      <Package className="w-10 h-10 mx-auto mb-2 text-muted-foreground" />
+                      <p>No low stock items.</p>
                     </td>
-                    <td className="text-muted-foreground">{product.sku}</td>
-                    <td className="text-destructive font-medium">{product.stock}</td>
-                    <td>{product.minStock}</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </CardContent>

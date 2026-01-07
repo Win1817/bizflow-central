@@ -1,9 +1,11 @@
+
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Filter, ArrowDownToLine } from "lucide-react";
-import { stockMovements } from "@/data/mockData";
+
+const stockMovements: any[] = [];
 
 const StockIn = () => {
   const stockInMovements = stockMovements.filter((m) => m.type === "in");
@@ -35,45 +37,45 @@ const StockIn = () => {
       </div>
 
       {/* Stock In Table */}
-      <Card>
-        <CardContent className="p-0">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Product</th>
-                <th>SKU</th>
-                <th>Quantity</th>
-                <th>Date</th>
-                <th>Reference</th>
-                <th>User</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stockInMovements.map((movement) => (
-                <tr key={movement.id}>
-                  <td className="font-medium">{movement.id}</td>
-                  <td>
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
-                        <ArrowDownToLine className="w-4 h-4 text-success" />
-                      </div>
-                      {movement.product}
-                    </div>
-                  </td>
-                  <td className="font-mono text-sm text-muted-foreground">{movement.sku}</td>
-                  <td className="font-semibold text-success">+{movement.quantity}</td>
-                  <td className="text-muted-foreground">{movement.date}</td>
-                  <td className="text-accent">{movement.reference}</td>
-                  <td className="text-muted-foreground">{movement.user}</td>
+      {stockInMovements.length > 0 ? (
+        <Card>
+          <CardContent className="p-0">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Quantity</th>
+                  <th>Date</th>
+                  <th>Reference</th>
+                  <th>User</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
-
-      {stockInMovements.length === 0 && (
+              </thead>
+              <tbody>
+                {stockInMovements.map((movement) => (
+                  <tr key={movement.id}>
+                    <td className="font-medium">{movement.id}</td>
+                    <td>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
+                          <ArrowDownToLine className="w-4 h-4 text-success" />
+                        </div>
+                        {movement.product}
+                      </div>
+                    </td>
+                    <td className="font-mono text-sm text-muted-foreground">{movement.sku}</td>
+                    <td className="font-semibold text-success">+{movement.quantity}</td>
+                    <td className="text-muted-foreground">{movement.date}</td>
+                    <td className="text-accent">{movement.reference}</td>
+                    <td className="text-muted-foreground">{movement.user}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      ) : (
         <div className="text-center py-12">
           <ArrowDownToLine className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-medium text-foreground">No stock in records</h3>
