@@ -29,15 +29,22 @@ const Sidebar = () => {
       {/* Logo */}
       <div className="px-6 py-5 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
-            <Boxes className="w-5 h-5 text-sidebar-primary-foreground" />
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img
+              src="/favicon.ico"
+              alt="BizFlow Logo"
+              className="w-8 h-8 object-contain"
+            />
           </div>
           <span className="text-xl font-bold text-sidebar-accent-foreground">
             BizFlow
           </span>
         </div>
-        <p className="text-xs text-sidebar-muted mt-1">Business Management</p>
+        <p className="text-xs text-sidebar-muted mt-1">
+          Business Management
+        </p>
       </div>
+
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-3">
